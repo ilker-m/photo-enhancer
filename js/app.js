@@ -1,4 +1,4 @@
-// DOM elementlerini al
+// DOM elementleri
 const dropzone = document.getElementById('dropzone');
 const fileInput = document.getElementById('file-input');
 const uploadContainer = document.getElementById('upload-container');
@@ -14,13 +14,13 @@ const scale2xBtn = document.getElementById('scale-2x');
 const scale4xBtn = document.getElementById('scale-4x');
 const slider = document.getElementById('slider');
 
-// Değişkenler
+
 let currentScale = '2x';
 let originalImageData = null;
 let enhancedImageData = null;
 let isDragging = false;
 
-// Event listeners
+
 dropzone.addEventListener('click', () => fileInput.click());
 fileInput.addEventListener('change', handleImageUpload);
 dropzone.addEventListener('dragover', handleDragOver);
@@ -92,7 +92,7 @@ function handleDrop(e) {
     }
 }
 
-// Görüntü işleme fonksiyonu
+// Görüntü işleme
 function processImage() {
     enhanceImage(originalImageData)
         .then(enhancedData => {
@@ -116,7 +116,7 @@ function processImage() {
         });
 }
 
-// Görüntü iyileştirme fonksiyonu
+// Görüntü iyileştirme
 function enhanceImage(imageData) {
     return new Promise((resolve, reject) => {
         try {
@@ -161,15 +161,15 @@ function enhanceImage(imageData) {
     });
 }
 
-// Filtreleri uygulama fonksiyonu
+// Filtreleri uygulama 
 function applyFilters(imageData) {
     const data = imageData.data;
     const width = imageData.width;
     const height = imageData.height;
     
-    // Kontrastı artır
-    const contrast = 1.2; // Kontrast faktörü
-    const brightness = 5; // Parlaklık ayarı
+
+    const contrast = 1.2; 
+    const brightness = 5; 
     
     for (let i = 0; i < data.length; i += 4) {
         // Kırmızı
@@ -178,12 +178,12 @@ function applyFilters(imageData) {
         data[i + 1] = contrastAdjust(data[i + 1], contrast, brightness);
         // Mavi
         data[i + 2] = contrastAdjust(data[i + 2], contrast, brightness);
-        // Alfa değişmiyor
+      
     }
     
-    // Keskinleştirme efekti uygula
+    // Keskinleştirm
     const tempData = new Uint8ClampedArray(data);
-    const kernel = [-1, -1, -1, -1, 9, -1, -1, -1, -1]; // Keskinleştirme kernel'i
+    const kernel = [-1, -1, -1, -1, 9, -1, -1, -1, -1]; 
     
     for (let y = 1; y < height - 1; y++) {
         for (let x = 1; x < width - 1; x++) {
@@ -205,14 +205,14 @@ function applyFilters(imageData) {
     return imageData;
 }
 
-// Kontrast ayarlama yardımcı fonksiyonu
+// Kontrast ayarlama
 function contrastAdjust(value, contrast, brightness) {
     value = value + brightness;
     value = (value - 128) * contrast + 128;
     return Math.min(255, Math.max(0, Math.round(value)));
 }
 
-// Ölçek değiştirme fonksiyonu
+// Ölçek değiştirme
 function changeScale(scale) {
     if (currentScale === scale) return;
     
@@ -227,12 +227,12 @@ function changeScale(scale) {
         scale4xBtn.classList.add('active');
     }
     
-    // Etiketi güncelle
+ 
     enhancedLabel.textContent = `${scale} İyileştirilmiş`;
     
-    // Eğer görüntü yüklüyse, yeniden işle
+    // Eğer görüntü yüklüyse
     if (originalImageData) {
-        // Yükleme durumunu göster
+    
         loading.classList.remove('hidden');
         imageComparison.classList.add('hidden');
         
@@ -242,7 +242,7 @@ function changeScale(scale) {
                 enhancedImageData = enhancedData;
                 enhancedImage.style.backgroundImage = `url(${enhancedImageData})`;
                 
-                // Yükleme durumunu gizle
+                // Yükleme  gizle
                 loading.classList.add('hidden');
                 imageComparison.classList.remove('hidden');
             })
@@ -253,30 +253,30 @@ function changeScale(scale) {
     }
 }
 
-// Slider pozisyonunu güncelleme fonksiyonu
+// Slider pozisyonunu güncelleme
 function updateSliderPosition(percent) {
     slider.style.left = `${percent}%`;
     originalImage.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
     enhancedImage.style.clipPath = `inset(0 0 0 ${percent}%)`;
 }
 
-// Sıfırlama fonksiyonu
+// Sıfırlama
 function resetUpload() {
     uploadContainer.classList.remove('hidden');
     imagePreview.classList.add('hidden');
     fileInput.value = '';
 }
 
-// İyileştirilmiş görüntüyü indirme fonksiyonu
+// İyileştirilmiş görüntüyü indir
 function downloadEnhancedImage() {
     if (!enhancedImageData) return;
     
-    // İndirme bağlantısı oluştur
+    // İndirme bağlantısı
     const link = document.createElement('a');
     link.href = enhancedImageData;
     link.download = 'iyilestirilmis_goruntu.jpg';
     
-    // Bağlantıyı tıkla ve temizle
+
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
